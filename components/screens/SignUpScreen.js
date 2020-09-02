@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-const SignUpScreen = ({navigation}) => {
+const SignUpScreen = ({ navigation }) => {
   return (
     <ImageBackground
       source={require('../../assets/WelcomeBackground.jpg')}
@@ -26,7 +26,7 @@ const SignUpScreen = ({navigation}) => {
           <TouchableOpacity
             style={styles.backButton}
             onPress={() => navigation.goBack()}>
-            <Icon style={{color: 'blue'}} size={36} name="arrow-left" />
+            <Icon style={{ color: 'blue' }} size={36} name="arrow-left" />
           </TouchableOpacity>
           <Text style={styles.headerText}>Create an account now!</Text>
         </View>

@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-const WelcomeScreen = ({navigation}) => {
+const WelcomeScreen = ({ navigation }) => {
   return (
     <ImageBackground
       source={require('../../assets/WelcomeBackground.jpg')}
@@ -47,7 +47,7 @@ const WelcomeScreen = ({navigation}) => {
           style={styles.linkSignup}
           onPress={() => navigation.navigate('SignUp')}>
           Dont´t have an account?{' '}
-          <Text style={{fontWeight: 'bold'}}>Sign up now</Text>
+          <Text style={{ fontWeight: 'bold' }}>Sign up now</Text>
         </Text>
       </View>
     </ImageBackground>
