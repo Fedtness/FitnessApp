@@ -69,7 +69,7 @@ const SignUpScreen = ({ navigation }) => {
         {/* Button to send API signup request and navigate to Home screen*/}
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate('Home')}>
+          onPress={() => navigation.navigate('FinishSignup')}>
           <Text style={styles.buttonText}>Sign up</Text>
         </TouchableOpacity>
       </View>
