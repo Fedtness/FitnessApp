@@ -1,10 +1,11 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import {View} from 'react-native';
+import TrainingStack from '../routes/trainingStack';
 
 const TrainingScreen = () => {
   return (
-    <View>
-      <Text>Training Screen</Text>
+    <View style={{flex: 1}}>
+      <TrainingStack />
     </View>
   );
 };
