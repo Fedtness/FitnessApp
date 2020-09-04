@@ -8,12 +8,12 @@ import {
   TouchableHighlight,
 } from 'react-native';
 
-const ChooseTraining = () => {
+const ChooseTraining = ({navigation}) => {
   return (
     <View style={styles.container}>
       <TouchableHighlight
         style={{flex: 1}}
-        onPress={() => console.log('Weight training')}>
+        onPress={() => navigation.navigate('ChooseAreaType')}>
         <ImageBackground
           source={require('../../../assets/WeightTraining.jpg')}
           style={styles.backgroundImage}>
