@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   Dimensions,
   ImageBackground,
@@ -8,48 +8,78 @@ import {
   Text,
   View,
   TouchableOpacity,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 
-const WelcomeScreen = ({ navigation }) => {
+const WelcomeScreen = ({navigation}) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [salt, setSalt] = useState('');
+
+  const login = async () => {
+    // console.log(email, password);
+
+    // await fetch('https://localhost:5001/api/Login?email=minemail')
+    //   .then((response) => {
+    //     console.log(response);
+    //   })
+    //   .catch((err) => console.log(err));
+
+    setEmail('');
+    setPassword('');
+
+    navigation.navigate('Home');
+  };
+
   return (
     <ImageBackground
       source={require('../../assets/WelcomeBackground.jpg')}
       style={styles.backgroundImage}>
       {/* Main container containing all other elements */}
-      <View style={styles.mainContainer}>
-        {/* Header container containing logo and app name*/}
-        <View style={styles.headerContainer}>
-          <Image
-            source={require('../../assets/Logo.png')}
-            style={styles.logoImage}
-          />
-          <Text style={styles.headerText}>Fedtness</Text>
-        </View>
-        {/* Input container containing 2 labels and 2 input fields and button */}
-        <View>
-          <View style={styles.inputField}>
-            <Text style={styles.inputLabel}>Email</Text>
-            <TextInput style={styles.inputBox} />
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.mainContainer}>
+          {/* Header container containing logo and app name*/}
+          <View style={styles.headerContainer}>
+            <Image
+              source={require('../../assets/Logo.png')}
+              style={styles.logoImage}
+            />
+            <Text style={styles.headerText}>Fedtness</Text>
           </View>
-          <View style={styles.inputField}>
-            <Text style={styles.inputLabel}>Password</Text>
-            <TextInput style={styles.inputBox} />
+          {/* Input container containing 2 labels and 2 input fields and button */}
+          <View>
+            <View style={styles.inputField}>
+              <Text style={styles.inputLabel}>Email</Text>
+              <TextInput
+                style={styles.inputBox}
+                onChangeText={(text) => setEmail(text)}
+                value={email}
+              />
+            </View>
+            <View style={styles.inputField}>
+              <Text style={styles.inputLabel}>Password</Text>
+              <TextInput
+                style={styles.inputBox}
+                onChangeText={(text) => setPassword(text)}
+                value={password}
+                secureTextEntry={true}
+              />
+            </View>
+            {/* Button to send API login request and navigate to Home screen*/}
+            <TouchableOpacity style={styles.button} onPress={login}>
+              <Text style={styles.buttonText}>Sign in</Text>
+            </TouchableOpacity>
           </View>
-          {/* Button to send API login request and navigate to Home screen*/}
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => navigation.navigate('Home')}>
-            <Text style={styles.buttonText}>Sign in</Text>
-          </TouchableOpacity>
+          {/* Link used to navigate to Sign up screen*/}
+          <Text
+            style={styles.linkSignup}
+            onPress={() => navigation.navigate('SignUp')}>
+            Dont´t have an account?{' '}
+            <Text style={{fontWeight: 'bold'}}>Sign up now</Text>
+          </Text>
         </View>
-        {/* Link used to navigate to Sign up screen*/}
-        <Text
-          style={styles.linkSignup}
-          onPress={() => navigation.navigate('SignUp')}>
-          Dont´t have an account?{' '}
-          <Text style={{ fontWeight: 'bold' }}>Sign up now</Text>
-        </Text>
-      </View>
+      </TouchableWithoutFeedback>
     </ImageBackground>
   );
 };
