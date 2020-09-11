@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -9,8 +9,11 @@ import {
   Dimensions,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import EditGeneralInfo from '../EditGeneralInfo';
 
 const ProfileScreen = ({navigation}) => {
+  const [generalInfoModal, setGeneralInfoModal] = useState(false);
+
   const [userInfo, setUserInfo] = useState({
     firstName: 'Dainis',
     lastName: 'Moisejenko',
@@ -34,13 +37,12 @@ const ProfileScreen = ({navigation}) => {
 
   const userBMI = () => {
     const BMI = (userInfo.weight / userInfo.height / userInfo.height) * 10000;
-    console.log(BMI.toFixed(2));
     return BMI.toFixed(2);
   };
 
-  useEffect(() => {
-    userBMI();
-  });
+  const closeGeneralInfoModal = () => {
+    setGeneralInfoModal(false);
+  };
 
   return (
     <View style={styles.container}>
@@ -60,10 +62,17 @@ const ProfileScreen = ({navigation}) => {
           {/* View that has text and icon as button that calls modal where user can edit general info*/}
           <View style={styles.InfoHeader}>
             <Text style={styles.InfoHeaderText}>General information</Text>
-            <TouchableOpacity style={styles.InfoHeaderIcon}>
+            <TouchableOpacity
+              style={styles.InfoHeaderIcon}
+              onPress={() => setGeneralInfoModal(true)}>
               <Icon name="pencil" size={30} />
             </TouchableOpacity>
           </View>
+
+          <EditGeneralInfo
+            close={closeGeneralInfoModal}
+            generalInfoModalVisible={generalInfoModal}
+          />
 
           {/* View that shows users general information*/}
           <View style={styles.generalInfo}>
