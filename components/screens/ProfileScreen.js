@@ -10,9 +10,11 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import EditGeneralInfo from '../profileComponents/EditGeneralInfo';
+import ChangePassword from '../profileComponents/ChangePassword';
 
 const ProfileScreen = ({navigation}) => {
   const [generalInfoModal, setGeneralInfoModal] = useState(false);
+  const [passwordModal, setPasswordModal] = useState(false);
 
   const [userInfo, setUserInfo] = useState({
     firstName: 'Dainis',
@@ -35,13 +37,20 @@ const ProfileScreen = ({navigation}) => {
     rightTight: 51.8,
   });
 
+  //Method ysed to calculate users BMI from users height and weight
   const userBMI = () => {
     const BMI = (userInfo.weight / userInfo.height / userInfo.height) * 10000;
     return BMI.toFixed(2);
   };
 
+  //Method to close general info edit modal
   const closeGeneralInfoModal = () => {
     setGeneralInfoModal(false);
+  };
+
+  //Method to close change password modal
+  const closePasswordModal = () => {
+    setPasswordModal(false);
   };
 
   return (
@@ -73,6 +82,11 @@ const ProfileScreen = ({navigation}) => {
             close={closeGeneralInfoModal}
             generalInfoModalVisible={generalInfoModal}
             userInfo={userInfo}
+          />
+
+          <ChangePassword
+            passwordModalVisible={passwordModal}
+            close={closePasswordModal}
           />
 
           {/* View that shows users general information*/}
@@ -107,7 +121,9 @@ const ProfileScreen = ({navigation}) => {
         </View>
 
         {/* Button that calls modal in which user can change password*/}
-        <TouchableOpacity style={styles.passButton}>
+        <TouchableOpacity
+          style={styles.passButton}
+          onPress={() => setPasswordModal(true)}>
           <Text style={styles.passButtonText}>Change password</Text>
         </TouchableOpacity>
 

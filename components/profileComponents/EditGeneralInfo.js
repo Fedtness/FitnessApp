@@ -129,7 +129,9 @@ const EditGeneralInfo = ({generalInfoModalVisible, close, userInfo}) => {
                 <View
                   style={[
                     styles.gender,
-                    {backgroundColor: gender == 'male' ? 'grey' : 'lightgrey'},
+                    {
+                      backgroundColor: gender == 'male' ? 'grey' : '#cccaca',
+                    },
                   ]}>
                   <Icon name="mars" size={25} />
                   <Text style={styles.genderText}>Male</Text>
@@ -142,8 +144,7 @@ const EditGeneralInfo = ({generalInfoModalVisible, close, userInfo}) => {
                   style={[
                     styles.gender,
                     {
-                      backgroundColor:
-                        gender == 'female' ? 'grey' : 'lightgrey',
+                      backgroundColor: gender == 'female' ? 'grey' : '#cccaca',
                     },
                   ]}>
                   <Icon name="venus" size={25} />
@@ -168,7 +169,7 @@ const styles = StyleSheet.create({
   modalContainer: {
     alignSelf: 'center',
     marginVertical: '10%',
-    backgroundColor: '#fff',
+    backgroundColor: '#ddd',
     width: Dimensions.get('screen').width / 1.25,
     height: Dimensions.get('screen').height / 1.25,
     padding: 20,
