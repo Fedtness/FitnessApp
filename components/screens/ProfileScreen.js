@@ -9,7 +9,7 @@ import {
   Dimensions,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import EditGeneralInfo from '../EditGeneralInfo';
+import EditGeneralInfo from '../profileComponents/EditGeneralInfo';
 
 const ProfileScreen = ({navigation}) => {
   const [generalInfoModal, setGeneralInfoModal] = useState(false);
