@@ -72,6 +72,7 @@ const ProfileScreen = ({navigation}) => {
           <EditGeneralInfo
             close={closeGeneralInfoModal}
             generalInfoModalVisible={generalInfoModal}
+            userInfo={userInfo}
           />
 
           {/* View that shows users general information*/}
