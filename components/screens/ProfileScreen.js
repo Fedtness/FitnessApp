@@ -9,12 +9,15 @@ import {
   Dimensions,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+
 import EditGeneralInfo from '../profileComponents/EditGeneralInfo';
 import ChangePassword from '../profileComponents/ChangePassword';
+import EditBodyData from '../profileComponents/EditBodyData';
 
 const ProfileScreen = ({navigation}) => {
   const [generalInfoModal, setGeneralInfoModal] = useState(false);
   const [passwordModal, setPasswordModal] = useState(false);
+  const [bodyDataModal, setBodyDataModal] = useState(false);
 
   const [userInfo, setUserInfo] = useState({
     firstName: 'Dainis',
@@ -34,7 +37,7 @@ const ProfileScreen = ({navigation}) => {
     waist: 77.2,
     hips: 79,
     leftThigh: 51.5,
-    rightTight: 51.8,
+    rightThigh: 51.8,
   });
 
   //Method ysed to calculate users BMI from users height and weight
@@ -51,6 +54,11 @@ const ProfileScreen = ({navigation}) => {
   //Method to close change password modal
   const closePasswordModal = () => {
     setPasswordModal(false);
+  };
+
+  //Method used to close edit body measurements modal
+  const closeBodyDataModal = () => {
+    setBodyDataModal(false);
   };
 
   return (
@@ -78,15 +86,24 @@ const ProfileScreen = ({navigation}) => {
             </TouchableOpacity>
           </View>
 
+          {/* Calling edit general info component which has modal used to edit user info */}
           <EditGeneralInfo
             close={closeGeneralInfoModal}
             generalInfoModalVisible={generalInfoModal}
             userInfo={userInfo}
           />
 
+          {/* Calling change password component which has modal used to change user password */}
           <ChangePassword
             passwordModalVisible={passwordModal}
             close={closePasswordModal}
+          />
+
+          {/* Calling edit body data component which has modal used to edit user body measurements*/}
+          <EditBodyData
+            bodyDataModal={bodyDataModal}
+            close={closeBodyDataModal}
+            bodyCM={bodyCM}
           />
 
           {/* View that shows users general information*/}
@@ -131,7 +148,9 @@ const ProfileScreen = ({navigation}) => {
         <View style={{marginBottom: '7%'}}>
           <View style={styles.InfoHeader}>
             <Text style={styles.InfoHeaderText}>Body measurements</Text>
-            <TouchableOpacity style={styles.InfoHeaderIcon}>
+            <TouchableOpacity
+              style={styles.InfoHeaderIcon}
+              onPress={() => setBodyDataModal(true)}>
               <Icon name="pencil" size={30} />
             </TouchableOpacity>
           </View>
@@ -162,7 +181,7 @@ const ProfileScreen = ({navigation}) => {
               </Text>
               <Text style={styles.bodyInfoText}>Hips: {bodyCM.hips} cm</Text>
               <Text style={styles.bodyInfoText}>
-                Right thigh: {bodyCM.rightTight} cm
+                Right thigh: {bodyCM.rightThigh} cm
               </Text>
             </View>
           </View>
