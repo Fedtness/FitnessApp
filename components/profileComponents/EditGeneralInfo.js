@@ -8,37 +8,26 @@ import {
   TouchableWithoutFeedback,
   TouchableOpacity,
   Keyboard,
+  KeyboardAvoidingView,
+  ScrollView,
   TextInput,
   Button,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const EditGeneralInfo = ({generalInfoModalVisible, close, userInfo}) => {
-  const [firstName, setFirstName] = useState(userInfo.firstName);
-  const [lastName, setLastName] = useState(userInfo.lastName);
-  const [email, setEmail] = useState(userInfo.email);
-  const [age, setAge] = useState(userInfo.age);
-  const [height, setHeight] = useState(userInfo.height);
-  const [weight, setWeight] = useState(userInfo.weight);
-  const [gender, setGender] = useState(userInfo.gender);
+  const [newUserInfo, setNewUserInfo] = useState({
+    firstName: userInfo.firstName,
+    lastName: userInfo.lastName,
+    email: userInfo.email,
+    age: userInfo.age,
+    height: userInfo.height,
+    weight: userInfo.weight,
+    gender: userInfo.gender,
+  });
 
   const saveChanges = () => {
-    console.log(
-      'FirstName: ' +
-        firstName +
-        '; LastName: ' +
-        lastName +
-        '; Email: ' +
-        email +
-        '; Age: ' +
-        age +
-        '; Height: ' +
-        height +
-        '; Weight: ' +
-        weight +
-        '; Gender: ' +
-        gender,
-    );
+    console.log(newUserInfo);
   };
 
   return (
@@ -59,101 +48,125 @@ const EditGeneralInfo = ({generalInfoModalVisible, close, userInfo}) => {
             {/* Header text*/}
             <Text style={styles.headerText}>Edit general information</Text>
 
-            {/* Form which has labels and inputs for different data used to update user information*/}
-            <View style={styles.editForm}>
-              <View style={styles.formRow}>
-                <Text style={styles.formLabel}>First name:</Text>
-                <TextInput
-                  style={styles.input}
-                  onChangeText={(name) => setFirstName(name)}
-                  value={firstName}
-                />
-              </View>
+            <KeyboardAvoidingView behavior="height" keyboardVerticalOffset={80}>
+              <ScrollView>
+                {/* Form which has labels and inputs for different data used to update user information*/}
+                <View style={styles.editForm}>
+                  <View style={styles.formRow}>
+                    <Text style={styles.formLabel}>First name:</Text>
+                    <TextInput
+                      style={styles.input}
+                      onChangeText={(value) =>
+                        setNewUserInfo({...newUserInfo, firstName: value})
+                      }
+                      value={newUserInfo.firstName}
+                    />
+                  </View>
 
-              <View style={styles.formRow}>
-                <Text style={styles.formLabel}>Last name:</Text>
-                <TextInput
-                  style={styles.input}
-                  onChangeText={(surname) => setLastName(surname)}
-                  value={lastName}
-                />
-              </View>
+                  <View style={styles.formRow}>
+                    <Text style={styles.formLabel}>Last name:</Text>
+                    <TextInput
+                      style={styles.input}
+                      onChangeText={(value) =>
+                        setNewUserInfo({...newUserInfo, lastName: value})
+                      }
+                      value={newUserInfo.lastName}
+                    />
+                  </View>
 
-              <View style={styles.formRow}>
-                <Text style={styles.formLabel}>Email:</Text>
-                <TextInput
-                  style={styles.input}
-                  onChangeText={(email) => setEmail(email)}
-                  value={email}
-                />
-              </View>
+                  <View style={styles.formRow}>
+                    <Text style={styles.formLabel}>Email:</Text>
+                    <TextInput
+                      style={styles.input}
+                      onChangeText={(value) =>
+                        setNewUserInfo({...newUserInfo, email: value})
+                      }
+                      value={newUserInfo.email}
+                    />
+                  </View>
 
-              <View style={styles.formRow}>
-                <Text style={styles.formLabel}>Age:</Text>
-                <TextInput
-                  style={styles.input}
-                  onChangeText={(age) => setAge(age)}
-                  keyboardType="number-pad"
-                  value={String(age)}
-                  maxLength={2}
-                />
-              </View>
+                  <View style={styles.formRow}>
+                    <Text style={styles.formLabel}>Age:</Text>
+                    <TextInput
+                      style={styles.input}
+                      onChangeText={(value) =>
+                        setNewUserInfo({...newUserInfo, age: value})
+                      }
+                      keyboardType="number-pad"
+                      value={String(newUserInfo.age)}
+                      maxLength={2}
+                    />
+                  </View>
 
-              <View style={styles.formRow}>
-                <Text style={styles.formLabel}>Height (cm):</Text>
-                <TextInput
-                  style={styles.input}
-                  onChangeText={(height) => setHeight(height)}
-                  keyboardType="number-pad"
-                  value={String(height)}
-                  maxLength={6}
-                />
-              </View>
+                  <View style={styles.formRow}>
+                    <Text style={styles.formLabel}>Height (cm):</Text>
+                    <TextInput
+                      style={styles.input}
+                      onChangeText={(value) =>
+                        setNewUserInfo({...newUserInfo, height: value})
+                      }
+                      keyboardType="number-pad"
+                      value={String(newUserInfo.height)}
+                      maxLength={6}
+                    />
+                  </View>
 
-              <View style={styles.formRow}>
-                <Text style={styles.formLabel}>Weight (kg):</Text>
-                <TextInput
-                  style={styles.input}
-                  onChangeText={(weight) => setWeight(weight)}
-                  keyboardType="number-pad"
-                  value={String(weight)}
-                  maxLength={6}
-                />
-              </View>
-            </View>
-
-            {/* View with 2 buttons to choose users gender*/}
-            <View style={styles.genderButtonsView}>
-              {/* Male gender button*/}
-              <TouchableWithoutFeedback onPress={() => setGender('male')}>
-                <View
-                  style={[
-                    styles.gender,
-                    {
-                      backgroundColor: gender == 'male' ? 'grey' : '#cccaca',
-                    },
-                  ]}>
-                  <Icon name="mars" size={25} />
-                  <Text style={styles.genderText}>Male</Text>
+                  <View style={styles.formRow}>
+                    <Text style={styles.formLabel}>Weight (kg):</Text>
+                    <TextInput
+                      style={styles.input}
+                      onChangeText={(value) =>
+                        setNewUserInfo({...newUserInfo, weight: value})
+                      }
+                      keyboardType="number-pad"
+                      value={String(newUserInfo.weight)}
+                      maxLength={6}
+                    />
+                  </View>
                 </View>
-              </TouchableWithoutFeedback>
 
-              {/* Female gender button*/}
-              <TouchableWithoutFeedback onPress={() => setGender('female')}>
-                <View
-                  style={[
-                    styles.gender,
-                    {
-                      backgroundColor: gender == 'female' ? 'grey' : '#cccaca',
-                    },
-                  ]}>
-                  <Icon name="venus" size={25} />
-                  <Text style={styles.genderText}>Female</Text>
+                {/* View with 2 buttons to choose users gender*/}
+                <View style={styles.genderButtonsView}>
+                  {/* Male gender button*/}
+                  <TouchableWithoutFeedback
+                    onPress={() =>
+                      setNewUserInfo({...newUserInfo, gender: 'male'})
+                    }>
+                    <View
+                      style={[
+                        styles.gender,
+                        {
+                          backgroundColor:
+                            newUserInfo.gender == 'male' ? 'grey' : '#cccaca',
+                        },
+                      ]}>
+                      <Icon name="mars" size={25} />
+                      <Text style={styles.genderText}>Male</Text>
+                    </View>
+                  </TouchableWithoutFeedback>
+
+                  {/* Female gender button*/}
+                  <TouchableWithoutFeedback
+                    onPress={() =>
+                      setNewUserInfo({...newUserInfo, gender: 'female'})
+                    }>
+                    <View
+                      style={[
+                        styles.gender,
+                        {
+                          backgroundColor:
+                            newUserInfo.gender == 'female' ? 'grey' : '#cccaca',
+                        },
+                      ]}>
+                      <Icon name="venus" size={25} />
+                      <Text style={styles.genderText}>Female</Text>
+                    </View>
+                  </TouchableWithoutFeedback>
                 </View>
-              </TouchableWithoutFeedback>
-            </View>
 
-            <Button onPress={saveChanges} title="Save changes" />
+                <Button onPress={saveChanges} title="Save changes" />
+              </ScrollView>
+            </KeyboardAvoidingView>
           </View>
         </View>
       </TouchableWithoutFeedback>
@@ -184,6 +197,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginTop: 20,
     textAlign: 'center',
+    marginBottom: '3%',
   },
   input: {
     borderBottomWidth: 2,
