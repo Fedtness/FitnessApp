@@ -19,6 +19,7 @@
     "native-base": "^2.13.14",
     "react": "16.13.1",
     "react-native": "0.63.2",
+    "react-native-bcrypt": "^2.4.0",
     "react-native-gesture-handler": "^1.7.0",
     "react-native-reanimated": "^1.13.0",
     "react-native-safe-area-context": "^3.1.7",
