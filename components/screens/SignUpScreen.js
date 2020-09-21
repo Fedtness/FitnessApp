@@ -61,7 +61,17 @@ const SignUpScreen = ({navigation}) => {
         //If response is OK then navigate to next screen
         .then((response) => {
           if (response.ok) {
-            navigation.navigate('FinishSignup');
+            setUserAccount({
+              firstName: '',
+              lastName: '',
+              username: '',
+              email: '',
+              password: '',
+              confPassword: '',
+            });
+            navigation.navigate('FinishSignup', {
+              userID: response.headers.map.location.split('s/')[1],
+            });
           }
         })
         .catch((error) => console.log(error));
