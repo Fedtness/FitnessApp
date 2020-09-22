@@ -50,7 +50,7 @@ const WelcomeScreen = ({navigation}) => {
           await AsyncStorage.setItem('userId', responseData.userId.toString());
           await AsyncStorage.setItem('username', responseData.username);
           //Navigating to Home screen
-          navigation.navigate('Home');
+          navigation.replace('Home');
           //If status is 401 set error to true to show error msg
           if (responseData.status === 401) {
             setLoginError(true);
