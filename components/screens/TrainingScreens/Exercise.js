@@ -69,7 +69,6 @@ const Exercise = ({navigation, route}) => {
           marginHorizontal: '5%',
           maxHeight: '30%',
           paddingBottom: '5%',
-          backgroundColor: '#cccccc',
         }}>
         <ScrollView style={{flexGrow: 1}}>
           <Text style={styles.descriptionText}>{exercise.description}</Text>
