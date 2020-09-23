@@ -55,10 +55,7 @@ const AllExercises = ({navigation, route}) => {
           />
         </TouchableOpacity>
         {/* Header text */}
-        <Text style={styles.header}>
-          Exercises for{' '}
-          <Text style={{fontWeight: 'bold'}}>{route.params.name}</Text>
-        </Text>
+        <Text style={styles.header}>{route.params.name} exercises</Text>
       </View>
 
       {/* FlatList to show all exercises */}
@@ -97,6 +94,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     marginVertical: 10,
     marginHorizontal: '5%',
+    fontWeight: 'bold',
   },
   singleItem: {
     width: '100%',
