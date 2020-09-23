@@ -61,6 +61,7 @@ const ChooseAreaType = ({navigation}) => {
   return (
     <View style={styles.container}>
       <View style={{flexDirection: 'row'}}>
+        {/* TouchableOpacity that works as button to go back to previous screen */}
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Icon
             name="arrow-left"
@@ -69,9 +70,11 @@ const ChooseAreaType = ({navigation}) => {
             style={{marginVertical: 10, marginHorizontal: 20}}
           />
         </TouchableOpacity>
+        {/* Header text */}
         <Text style={styles.header}>Choose muscle goup to train</Text>
       </View>
 
+      {/* FlatList to show all elements */}
       <FlatList
         style={styles.areaTypeItems}
         data={areaType}
@@ -80,11 +83,15 @@ const ChooseAreaType = ({navigation}) => {
         contentContainerStyle={{alignItems: 'space-between'}}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({item}) => (
+          // TouchableOpacity to choose and go find all exercises for muscle group
           <TouchableOpacity
             key={item.id}
             style={styles.singleItem}
             onPress={() =>
-              navigation.navigate('MuscleGroupExercise', {id: item.id})
+              navigation.navigate('MuscleGroupExercise', {
+                id: item.id,
+                name: item.name,
+              })
             }>
             <Image source={item.image} style={styles.areaTypeImage} />
             <Text style={styles.itemText}>{item.name}</Text>
