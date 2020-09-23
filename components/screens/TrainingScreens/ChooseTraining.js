@@ -23,7 +23,9 @@ const ChooseTraining = ({navigation}) => {
 
       <TouchableHighlight
         style={{flex: 1}}
-        onPress={() => console.log('Calisthenics training')}>
+        onPress={() =>
+          navigation.navigate('AllExercises', {name: 'Calisthenics'})
+        }>
         <ImageBackground
           source={require('../../../assets/CalisthenicsTraining.jpg')}
           style={styles.backgroundImage}>
@@ -33,7 +35,7 @@ const ChooseTraining = ({navigation}) => {
 
       <TouchableHighlight
         style={{flex: 1}}
-        onPress={() => console.log('Cardio training')}>
+        onPress={() => navigation.navigate('AllExercises', {name: 'Cardio'})}>
         <ImageBackground
           source={require('../../../assets/CardioTraining.jpg')}
           style={styles.backgroundImage}>

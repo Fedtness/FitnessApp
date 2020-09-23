@@ -4,6 +4,8 @@ import {createStackNavigator} from '@react-navigation/stack';
 import ChooseTraining from '../screens/TrainingScreens/ChooseTraining';
 import ChooseAreaType from '../screens/TrainingScreens/ChooseAreaType';
 import MuscleGroupExercise from '../screens/TrainingScreens/MuscleGroupExercise';
+import AllExercises from '../screens/TrainingScreens/AllExercises';
+import Exercise from '../screens/TrainingScreens/Exercise';
 
 const TrainingStack = () => {
   const Stack = createStackNavigator();
@@ -18,6 +20,8 @@ const TrainingStack = () => {
         name="MuscleGroupExercise"
         component={MuscleGroupExercise}
       />
+      <Stack.Screen name="AllExercises" component={AllExercises} />
+      <Stack.Screen name="Exercise" component={Exercise} />
     </Stack.Navigator>
   );
 };

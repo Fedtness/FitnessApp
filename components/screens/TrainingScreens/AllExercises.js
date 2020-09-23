@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-const MuscleGroupExercise = ({navigation, route}) => {
+const AllExercises = ({navigation, route}) => {
   const [exercises, setExercises] = useState([]);
 
   //Using useEffect to listen to 'focus' event and data from API (Triggers on mount)
@@ -24,16 +24,13 @@ const MuscleGroupExercise = ({navigation, route}) => {
 
   //Method used to fetch all exercises for one muscle group
   const getExercises = async () => {
-    await fetch(
-      'http://10.0.3.101:8009/api/Exercises/area/' + route.params.id,
-      {
-        method: 'GET',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
+    await fetch('http://10.0.3.101:8009/api/Exercises/' + route.params.name, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
       },
-    )
+    })
       // Return response as JSON
       .then((response) => {
         return response.json();
@@ -127,4 +124,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MuscleGroupExercise;
+export default AllExercises;
