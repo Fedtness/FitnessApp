@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -9,6 +9,7 @@ import {
   Dimensions,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import EditGeneralInfo from '../profileComponents/EditGeneralInfo';
 import ChangePassword from '../profileComponents/ChangePassword';
@@ -18,37 +19,143 @@ const ProfileScreen = ({navigation}) => {
   const [generalInfoModal, setGeneralInfoModal] = useState(false);
   const [passwordModal, setPasswordModal] = useState(false);
   const [bodyDataModal, setBodyDataModal] = useState(false);
+  const [username, setUsername] = useState('');
+
+  const [userBMI, setUserBMI] = useState(null);
 
   const [userInfo, setUserInfo] = useState({
-    firstName: 'Dainis',
-    lastName: 'Moisejenko',
-    email: 'moisejenko11@email.com',
-    age: 22,
-    height: 201.2,
-    weight: 90.3,
-    gender: 'male',
+    firstName: '',
+    lastName: '',
+    email: '',
+  });
+
+  const [generalInfo, setGeneralInfo] = useState({
+    age: null,
+    height: null,
+    weight: null,
+    gender: '',
   });
 
   const [bodyCM, setBodyCM] = useState({
-    chestBust: 82.2,
-    abdomen: 75.7,
-    leftArm: 41.5,
-    rightArm: 41.7,
-    waist: 77.2,
-    hips: 79,
-    leftThigh: 51.5,
-    rightThigh: 51.8,
+    chestBust: null,
+    abdomen: null,
+    leftArm: null,
+    rightArm: null,
+    waist: null,
+    hips: null,
+    leftThigh: null,
+    rightThigh: null,
   });
 
+  //Using useEffect to listen to 'focus' event and data from API (Triggers on mount)
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', async () => {
+      //Getting username from asyncstorage and setting it in state hook
+      setUsername(await AsyncStorage.getItem('username'));
+      getUserInfo();
+      getBodyMeasurements();
+    });
+    //Unsubscribing from the event so it gets removed on unmount
+    return unsubscribe;
+  }, [navigation]);
+
+  //Method used to make 2 fetches for getting user account info and general info
+  const getUserInfo = async () => {
+    //Getting user ID saved in asyncstorage
+    const userID = await AsyncStorage.getItem('userId');
+
+    //First fetch to get info from UserAccounts table in database
+    await fetch('http://10.0.3.101:8009/api/UserAccounts/' + userID, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    })
+      // Return response as JSON
+      .then((response) => {
+        return response.json();
+      })
+      //Set response data in state hook
+      .then(async (responseData) => {
+        setUserInfo({
+          firstName: responseData.firstName,
+          lastName: responseData.lastName,
+          email: responseData.email,
+        });
+      })
+      .catch((error) => console.log(error));
+
+    //Second fetch to get info from GeneralInfo table in database
+    await fetch('http://10.0.3.101:8009/api/GeneralInfoes/' + userID, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    })
+      // Return response as JSON
+      .then((response) => {
+        return response.json();
+      })
+      //Set response data in state hook
+      .then(async (responseData) => {
+        setGeneralInfo({
+          age: responseData.age,
+          height: responseData.height,
+          weight: responseData.weight,
+          gender: responseData.gender,
+        });
+        //And call this method with 2 params for weight and height
+        getUserBMI(responseData.weight, responseData.height);
+      })
+      .catch((error) => console.log(error));
+  };
+
+  //Method used to fetch users body measurement
+  const getBodyMeasurements = async () => {
+    //Gettting userID saved in asyncStorage
+    const userID = await AsyncStorage.getItem('userId');
+
+    //Fetch to get info from BodyMeasurements table in database
+    await fetch('http://10.0.3.101:8009/api/BodyMeasurements/' + userID, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    })
+      // Return response as JSON
+      .then((response) => {
+        return response.json();
+      })
+      //Set response data in state hook
+      .then(async (responseData) => {
+        setBodyCM({
+          ...bodyCM,
+          chestBust: responseData.chest_bust,
+          abdomen: responseData.abdomen,
+          leftArm: responseData.leftArm,
+          rightArm: responseData.rightArm,
+          waist: responseData.waist,
+          hips: responseData.hips,
+          leftThigh: responseData.leftThigh,
+          rightThigh: responseData.rightThigh,
+        });
+      })
+      .catch((error) => console.log(error));
+  };
+
   //Method ysed to calculate users BMI from users height and weight
-  const userBMI = () => {
-    const BMI = (userInfo.weight / userInfo.height / userInfo.height) * 10000;
-    return BMI.toFixed(2);
+  const getUserBMI = (weight, height) => {
+    const BMI = (weight / height / height) * 10000;
+    setUserBMI(BMI.toFixed(2));
   };
 
   //Method to close general info edit modal
   const closeGeneralInfoModal = () => {
     setGeneralInfoModal(false);
+    getUserInfo();
   };
 
   //Method to close change password modal
@@ -59,6 +166,7 @@ const ProfileScreen = ({navigation}) => {
   //Method used to close edit body measurements modal
   const closeBodyDataModal = () => {
     setBodyDataModal(false);
+    getBodyMeasurements();
   };
 
   return (
@@ -66,7 +174,7 @@ const ProfileScreen = ({navigation}) => {
       <ScrollView>
         {/* Header view that has text that shows users username and logout button*/}
         <View style={styles.header}>
-          <Text style={styles.usernameText}>[USERNAME]</Text>
+          <Text style={styles.usernameText}>{username}</Text>
           <TouchableOpacity
             style={styles.logOutButton}
             onPress={() => navigation.replace('Welcome')}>
@@ -90,7 +198,6 @@ const ProfileScreen = ({navigation}) => {
           <EditGeneralInfo
             close={closeGeneralInfoModal}
             generalInfoModalVisible={generalInfoModal}
-            userInfo={userInfo}
           />
 
           {/* Calling change password component which has modal used to change user password */}
@@ -103,7 +210,6 @@ const ProfileScreen = ({navigation}) => {
           <EditBodyData
             bodyDataModal={bodyDataModal}
             close={closeBodyDataModal}
-            bodyCM={bodyCM}
           />
 
           {/* View that shows users general information*/}
@@ -120,19 +226,23 @@ const ProfileScreen = ({navigation}) => {
               Email: <Text style={{fontWeight: 'bold'}}>{userInfo.email}</Text>
             </Text>
             <Text style={styles.generalInfoText}>
-              Age: <Text style={{fontWeight: 'bold'}}>{userInfo.age}</Text>
+              Age: <Text style={{fontWeight: 'bold'}}>{generalInfo.age}</Text>
             </Text>
             <Text style={styles.generalInfoText}>
               Height:{' '}
-              <Text style={{fontWeight: 'bold'}}>{userInfo.height}</Text> cm
+              <Text style={{fontWeight: 'bold'}}>{generalInfo.height}</Text> cm
             </Text>
             <Text style={styles.generalInfoText}>
               Weight:{' '}
-              <Text style={{fontWeight: 'bold'}}>{userInfo.weight}</Text> kg
+              <Text style={{fontWeight: 'bold'}}>{generalInfo.weight}</Text> kg
             </Text>
             <Text style={styles.generalInfoText}>
               Gender:{' '}
-              <Text style={{fontWeight: 'bold'}}>{userInfo.gender}</Text>
+              {generalInfo.gender === '' ? null : generalInfo.gender === 'M' ? (
+                <Text style={{fontWeight: 'bold'}}>Male</Text>
+              ) : (
+                <Text style={{fontWeight: 'bold'}}>Female</Text>
+              )}
             </Text>
           </View>
         </View>
@@ -187,21 +297,25 @@ const ProfileScreen = ({navigation}) => {
           </View>
         </View>
 
+        {/* View that has a text like a header*/}
         <View>
           <View style={styles.InfoHeader}>
             <Text style={styles.InfoHeaderText}>BMI</Text>
           </View>
 
+          {/* Image showing BMI chart*/}
           <Image
             source={require('../../assets/BMI-chart.jpg')}
             style={styles.BMIimage}
           />
 
+          {/* View showing users BMI*/}
           <View style={{flexDirection: 'row', justifyContent: 'center'}}>
             <Text style={styles.BMIText}>Your BMI: </Text>
-            <Text style={styles.BMIInfo}>{userBMI()}</Text>
+            <Text style={styles.BMIInfo}>{userBMI}</Text>
           </View>
 
+          {/* Text showing additional info about BMI in gerenal*/}
           <Text
             style={{
               fontStyle: 'italic',
