@@ -105,6 +105,7 @@ const styles = StyleSheet.create({
   },
   descriptionText: {
     fontSize: 16,
+    paddingBottom: '5%',
   },
 });
 
