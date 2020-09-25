@@ -17,11 +17,6 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-community/async-storage';
 
 const EditGeneralInfo = ({generalInfoModalVisible, close}) => {
-  const [patchResponse, setPatchResponse] = useState({
-    first: false,
-    second: false,
-  });
-
   const [newUserInfo, setNewUserInfo] = useState({
     firstName: '',
     lastName: '',
