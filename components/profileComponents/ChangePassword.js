@@ -10,16 +10,81 @@ import {
   Keyboard,
   TextInput,
 } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
+import bcrypt from 'react-native-bcrypt';
 
 const ChangePassword = ({passwordModalVisible, close}) => {
   const [newPassword, setNewPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState('');
+
+  const [newPassError, setNewPassError] = useState('');
+  const [confPassError, setConfPassError] = useState('');
 
   //Methos used to close modal and set input values back to empty
   const closeModal = () => {
     setNewPassword('');
     setRepeatPassword('');
     close();
+  };
+
+  //Method used to sign up new user
+  const updatePassword = async () => {
+    //Calling validate ethod to check for user input (If all inputs good return true)
+    if (validate()) {
+      //Gettinf userID from asyncStorage
+      const userID = await AsyncStorage.getItem('userId');
+      //Setting salt for password hashing
+      var salt = await bcrypt.genSaltSync(7);
+      //Hashing password
+      var hash = await bcrypt.hashSync(newPassword, salt);
+
+      //Using fetch method posting data into database using API
+      await fetch('http://10.0.3.101:8009/api/UserAccounts/' + userID, {
+        method: 'PATCH',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          password: hash,
+        }),
+      })
+        //If response is OK then close this modal
+        .then((response) => {
+          if (response.status === 200) {
+            close();
+          }
+        })
+        .catch((error) => console.log(error));
+    }
+  };
+
+  //Method to validate user inputs
+  const validate = () => {
+    let passwordError = '';
+    let confPasswordError = '';
+
+    //Password must match rules
+    if (!newPassword.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/)) {
+      passwordError =
+        'Password must contain at least 8 characters and 1 number, 1 uppercalse and 1 lowecase character';
+    }
+
+    //Confirm password must match with password
+    if (!repeatPassword || !newPassword.match(repeatPassword)) {
+      confPasswordError = 'Passwords does not match';
+    }
+
+    //If there is some error then return false
+    if (passwordError || confPasswordError) {
+      //If there is some errors then set them in state hooks
+      setNewPassError(passwordError);
+      setConfPassError(confPasswordError);
+      return false;
+    }
+
+    //Else return true
+    return true;
   };
 
   return (
@@ -37,36 +102,48 @@ const ChangePassword = ({passwordModalVisible, close}) => {
 
             {/* Form view with 2 labels and 2 inputs */}
             <View style={styles.passForm}>
+              {/* Form view/row with label, textinput and error msg*/}
               <View style={styles.formRow}>
                 <Text style={styles.formLabel}>New password</Text>
                 <TextInput
                   style={styles.input}
-                  onChangeText={(pass) => setNewPassword(pass)}
+                  onChangeText={(pass) => {
+                    setNewPassword(pass), setNewPassError('');
+                  }}
                   value={newPassword}
                   secureTextEntry={true}
                 />
+                <Text style={styles.errorMsg}>{newPassError}</Text>
               </View>
 
+              {/* Form view/row with label, textinput and error msg*/}
               <View style={styles.formRow}>
                 <Text style={styles.formLabel}>Repeat new password</Text>
                 <TextInput
                   style={styles.input}
-                  onChangeText={(repPass) => setRepeatPassword(repPass)}
+                  onChangeText={(repPass) => {
+                    setRepeatPassword(repPass), setConfPassError('');
+                  }}
                   value={repeatPassword}
                   secureTextEntry={true}
                 />
+                <Text style={styles.errorMsg}>{confPassError}</Text>
               </View>
             </View>
 
             {/* Button view that has 2 buttons*/}
             <View style={styles.buttonView}>
+              {/* Button to cancel and close modal*/}
               <TouchableOpacity
                 style={styles.cancelButton}
                 onPress={closeModal}>
                 <Text style={styles.buttonText}>Cancel</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.confirmButton}>
+              {/* Button to update users password and close modal*/}
+              <TouchableOpacity
+                style={styles.confirmButton}
+                onPress={() => updatePassword()}>
                 <Text style={styles.buttonText}>Confirm</Text>
               </TouchableOpacity>
             </View>
@@ -133,6 +210,10 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     padding: '5%',
     marginHorizontal: '10%',
+  },
+  errorMsg: {
+    color: '#360101',
+    fontWeight: 'bold',
   },
 });
 
