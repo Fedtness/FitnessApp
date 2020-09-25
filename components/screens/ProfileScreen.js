@@ -169,6 +169,11 @@ const ProfileScreen = ({navigation}) => {
     getBodyMeasurements();
   };
 
+  const logOut = async () => {
+    await AsyncStorage.multiRemove(['userId', 'username']);
+    navigation.replace('Welcome');
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -177,7 +182,7 @@ const ProfileScreen = ({navigation}) => {
           <Text style={styles.usernameText}>{username}</Text>
           <TouchableOpacity
             style={styles.logOutButton}
-            onPress={() => navigation.replace('Welcome')}>
+            onPress={() => logOut()}>
             <Text style={styles.logOutButtonText}>Log out</Text>
           </TouchableOpacity>
         </View>
