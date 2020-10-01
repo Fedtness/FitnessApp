@@ -173,7 +173,7 @@ const EditGeneralInfo = ({generalInfoModalVisible, close}) => {
                       value={newUserInfo.email}
                     />
                   </View>
-                  {/* Input view with label and textinput*/}'
+                  {/* Input view with label and textinput*/}
                   <View style={styles.formRow}>
                     <Text style={styles.formLabel}>Age:</Text>
                     <TextInput
