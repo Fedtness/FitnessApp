@@ -7,6 +7,7 @@ import {
   ScrollView,
   Image,
   Dimensions,
+  ActivityIndicator,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -22,6 +23,7 @@ const ProfileScreen = ({navigation}) => {
   const [username, setUsername] = useState('');
 
   const [userBMI, setUserBMI] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [userInfo, setUserInfo] = useState({
     firstName: '',
@@ -61,6 +63,7 @@ const ProfileScreen = ({navigation}) => {
 
   //Method used to make 2 fetches for getting user account info and general info
   const getUserInfo = async () => {
+    setIsLoading(true);
     //Getting user ID saved in asyncstorage
     const userID = await AsyncStorage.getItem('userId');
 
@@ -144,6 +147,8 @@ const ProfileScreen = ({navigation}) => {
         });
       })
       .catch((error) => console.log(error));
+
+    setIsLoading(false);
   };
 
   //Method ysed to calculate users BMI from users height and weight
@@ -334,6 +339,9 @@ const ProfileScreen = ({navigation}) => {
           </Text>
         </View>
       </ScrollView>
+      {isLoading && (
+        <ActivityIndicator size="large" color="grey" style={styles.indicator} />
+      )}
     </View>
   );
 };
@@ -425,6 +433,14 @@ const styles = StyleSheet.create({
   BMIInfo: {
     fontSize: 20,
     fontWeight: 'bold',
+  },
+  indicator: {
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    position: 'absolute',
   },
 });
 
