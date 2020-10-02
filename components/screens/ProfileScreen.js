@@ -113,10 +113,13 @@ const ProfileScreen = ({navigation}) => {
         getUserBMI(responseData.weight, responseData.height);
       })
       .catch((error) => console.log(error));
+
+    setIsLoading(false);
   };
 
   //Method used to fetch users body measurement
   const getBodyMeasurements = async () => {
+    setIsLoading(true);
     //Gettting userID saved in asyncStorage
     const userID = await AsyncStorage.getItem('userId');
 
