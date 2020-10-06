@@ -23,6 +23,8 @@ const WelcomeScreen = ({navigation}) => {
   const [loginError, setLoginError] = useState(false);
 
   const login = async () => {
+    navigation.replace('Home');
+
     if (validate()) {
       //Using fetch method posting data into database using API
       await fetch('http://10.0.3.101:8009/api/Login', {
@@ -41,19 +43,23 @@ const WelcomeScreen = ({navigation}) => {
           return response.json();
         })
         .then(async (responseData) => {
-          //Setting state hooks back to empty
-          setEmail('');
-          setPassword('');
-          setInputErrors({emailError: '', passwordError: ''});
-          setLoginError(false);
-          //Saving user id and username in AsyncStorage
-          await AsyncStorage.setItem('userId', responseData.userId.toString());
-          await AsyncStorage.setItem('username', responseData.username);
-          //Navigating to Home screen
-          navigation.replace('Home');
           //If status is 401 set error to true to show error msg
           if (responseData.status === 401) {
             setLoginError(true);
+          } else {
+            //Setting state hooks back to empty
+            setEmail('');
+            setPassword('');
+            setInputErrors({emailError: '', passwordError: ''});
+            setLoginError(false);
+            //Saving user id and username in AsyncStorage
+            await AsyncStorage.setItem(
+              'userId',
+              responseData.userID.toString(),
+            );
+            await AsyncStorage.setItem('username', responseData.username);
+            //Navigating to Home screen
+            navigation.replace('Home');
           }
         })
         .catch((error) => console.log(error));
