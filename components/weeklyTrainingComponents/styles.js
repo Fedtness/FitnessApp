@@ -155,7 +155,12 @@ const styles = StyleSheet.create({
     color: 'grey',
     fontSize: 12,
   },
-  eventNote: {},
+  eventNote: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    height: '100%',
+    width: '70%',
+  },
   lineSeparator: {
     width: '100%',
     borderBottomColor: 'lightgrey',
@@ -169,6 +174,14 @@ const styles = StyleSheet.create({
     borderRadius: 4 / 2,
     position: 'absolute',
     bottom: '10%',
+  },
+  eventText: {
+    fontWeight: 'bold',
+    width: '85%',
+    textAlignVertical: 'center',
+  },
+  icon: {
+    textAlignVertical: 'center',
   },
 });
 
