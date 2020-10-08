@@ -94,7 +94,9 @@ const WeeklyTraining = (props) => {
           eventViews = events.map((event, j) => {
             //Getting the start of event
             let startTime = moment(event.timeStamp).format('LT').toString();
-            //Getting the duration
+            //Getting duration string for checking
+            let durationString = event.duration;
+            //Getting the duration HH:mm:ss
             let duration = event.duration.split(':');
             //Parsing duration to seconds
             let seconds =
@@ -111,7 +113,7 @@ const WeeklyTraining = (props) => {
               <View key={i + '-' + j}>
                 <View style={styles.event}>
                   {/* If duration is empty then show only start time else show start time and finish time */}
-                  {duration == '' ? (
+                  {durationString === '00:00:00' ? (
                     <View style={styles.eventDuration}>
                       <View style={styles.durationContainer}>
                         <View style={styles.durationDot} />
@@ -179,7 +181,7 @@ const WeeklyTraining = (props) => {
             }}>
             <TouchableOpacity
               style={styles.dayLabel}
-              onPress={() => props.addEvent(weekdayToAdd.format('DD-MM-YYYY'))}>
+              onPress={() => props.addEvent(weekdayToAdd.format('YYYY-MM-DD'))}>
               <Text style={[styles.monthDateText, {color: props.themeColor}]}>
                 {weekdayToAdd.format('D/M').toString()}
               </Text>
