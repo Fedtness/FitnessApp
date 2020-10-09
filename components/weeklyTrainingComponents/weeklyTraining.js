@@ -138,11 +138,12 @@ const WeeklyTraining = (props) => {
                   {/* Event note is clickable */}
                   <TouchableOpacity
                     style={styles.eventNote}
-                    // onLongPress={() => props.editEvent(event.id)}
-                    // onPress={() =>
-                    //   props.seeEvent(event.id, event.exercises.name)
-                    // }
-                  >
+                    onLongPress={() =>
+                      props.editEvent(event.id, event.exercises.name)
+                    }
+                    onPress={() =>
+                      props.seeEvent(event.id, event.exercises.name)
+                    }>
                     <Text style={styles.eventText}>{event.exercises.name}</Text>
                     {/* If event is completed then show "check" icon */}
                     {event.isComplete ? (

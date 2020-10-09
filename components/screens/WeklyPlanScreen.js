@@ -10,12 +10,17 @@ import WeeklyTraining from '../weeklyTrainingComponents/weeklyTraining';
 import AsyncStorage from '@react-native-community/async-storage';
 
 import AddEvent from '../weeklyTrainingComponents/AddEvent';
+import EditEvent from '../weeklyTrainingComponents/EditEvent';
 
 const WeeklyPlanScreen = ({navigation}) => {
   const [events, setEvents] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [date, setDate] = useState('');
   const [addEventVisible, setAddEventVisible] = useState(false);
+  const [editEventVisible, setEditEventVisible] = useState(false);
+  const [seeEventVisible, setSeeEventVisible] = useState(false);
+  const [exerciseID, setExerciseID] = useState('');
+  const [exerciseName, setExerciseName] = useState('');
 
   //Using useEffect to listen to 'focus' event and data from API (Triggers on mount)
   useEffect(() => {
@@ -34,7 +39,7 @@ const WeeklyPlanScreen = ({navigation}) => {
     let userID = await AsyncStorage.getItem('userId');
 
     //First fetch to get info from DailyExercises table in database
-    await fetch('http://10.0.3.101:8009/api/DailyExercises/' + userID, {
+    await fetch('http://10.0.3.101:8009/api/DailyExercises/User/' + userID, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
@@ -54,12 +59,13 @@ const WeeklyPlanScreen = ({navigation}) => {
     setIsLoading(false);
   };
 
-  //Method used to create new events (weekly plan / exercises)
+  //Method used to open modal for creating new events (weekly plan / exercises)
   const addEvent = (date) => {
     setDate(date);
     setAddEventVisible(true);
   };
 
+  //Method used to close modal for createing new events and rerendering this (getting all user exercises again)
   const closeAddEvent = () => {
     setAddEventVisible(false);
     getUserExercises();
@@ -71,8 +77,15 @@ const WeeklyPlanScreen = ({navigation}) => {
   };
 
   //Method to edit event (weekly plan / exercise)
-  const editEvent = (id) => {
-    console.log('Long press on: ' + id);
+  const editEvent = (id, name) => {
+    setExerciseID(id);
+    setExerciseName(name);
+    setEditEventVisible(true);
+  };
+
+  const closeEditEvent = () => {
+    setEditEventVisible(false);
+    getUserExercises();
   };
 
   return (
@@ -89,6 +102,13 @@ const WeeklyPlanScreen = ({navigation}) => {
         addEventVisible={addEventVisible}
         close={closeAddEvent}
         date={date}
+      />
+
+      <EditEvent
+        editEventVisible={editEventVisible}
+        close={closeEditEvent}
+        exerciseID={exerciseID}
+        exerciseName={exerciseName}
       />
 
       {isLoading && (
