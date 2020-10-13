@@ -11,6 +11,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 import AddEvent from '../weeklyTrainingComponents/AddEvent';
 import EditEvent from '../weeklyTrainingComponents/EditEvent';
+import SeeEvent from '../weeklyTrainingComponents/SeeEvent';
 
 const WeeklyPlanScreen = ({navigation}) => {
   const [events, setEvents] = useState([]);
@@ -73,7 +74,14 @@ const WeeklyPlanScreen = ({navigation}) => {
 
   //Method to see full event info (weekly plan / exercise)
   const seeEvent = (id, name) => {
-    console.log('Id: ' + id + ', Name: ' + name);
+    setExerciseID(id);
+    setExerciseName(name);
+    setSeeEventVisible(true);
+  };
+
+  //Method used to close seeEvent modal
+  const closeSeeEvent = () => {
+    setSeeEventVisible(false);
   };
 
   //Method to edit event (weekly plan / exercise)
@@ -83,6 +91,7 @@ const WeeklyPlanScreen = ({navigation}) => {
     setEditEventVisible(true);
   };
 
+  //Method used to close edit event modal and rerendering users weekly exercises
   const closeEditEvent = () => {
     setEditEventVisible(false);
     getUserExercises();
@@ -107,6 +116,13 @@ const WeeklyPlanScreen = ({navigation}) => {
       <EditEvent
         editEventVisible={editEventVisible}
         close={closeEditEvent}
+        exerciseID={exerciseID}
+        exerciseName={exerciseName}
+      />
+
+      <SeeEvent
+        seeEventVisible={seeEventVisible}
+        close={closeSeeEvent}
         exerciseID={exerciseID}
         exerciseName={exerciseName}
       />
