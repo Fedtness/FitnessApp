@@ -110,15 +110,12 @@ const EditEvent = ({editEventVisible, close, exerciseID, exerciseName}) => {
     return true;
   };
 
+  //Method used to delete users dailyExercise
   const deleteEvent = async () => {
     setIsLoading(true);
-    //Fetch to get dailyExercise date from database
+    //Fetch to delete dailyExercise from database
     await fetch('http://10.0.3.101:8009/api/DailyExercises/' + exerciseID, {
       method: 'DELETE',
-      // headers: {
-      //   Accept: 'application/json',
-      //   'Content-Type': 'application/json',
-      // },
     }).catch((error) => console.log(error));
     setIsLoading(false);
     close();
