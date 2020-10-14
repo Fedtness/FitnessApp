@@ -57,8 +57,6 @@ const BrowseScreen = ({navigation}) => {
         setEvents(todaysExercises);
       })
       .catch((error) => console.log(error));
-    console.log(events);
-
     setIsLoading(false);
   };
 
