@@ -23,8 +23,6 @@ const WelcomeScreen = ({navigation}) => {
   const [loginError, setLoginError] = useState(false);
 
   const login = async () => {
-    navigation.replace('Home');
-
     if (validate()) {
       //Using fetch method posting data into database using API
       await fetch('http://10.0.3.101:8009/api/Login', {
